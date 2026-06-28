@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PDF Translator Pro — Yüksek Teknoloji Çeviri Sistemi">
+  <title>PDF Translator Pro | CYBER-HUD</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☢️</text></svg>">
+</head>
+<body>
+
+  <!-- Cyberpunk Background Effects -->
+  <div class="cyber-grid"></div>
+  <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  
+  <div class="watermark-bg">
+    <!-- Classified repeating watermark -->
+    <div class="wm-row">
+      <span>TOP SECRET</span><span>//</span><span>designed by yavuzselimerdogan</span><span>//</span><span>GENIUS ENGINE ONLINE</span>
+    </div>
+    <div class="wm-row" style="animation-direction: reverse; animation-duration: 40s;">
+      <span>RESTRICTED ACCESS</span><span>//</span><span>designed by yavuzselimerdogan</span><span>//</span><span>NEURAL NET ACTIVE</span>
+    </div>
+    <div class="wm-row">
+      <span>SYSTEM OVERRIDE</span><span>//</span><span>designed by yavuzselimerdogan</span><span>//</span><span>TRANSLATION CORE</span>
+    </div>
+    <div class="wm-row" style="animation-direction: reverse; animation-duration: 45s;">
+      <span>CLASSIFIED</span><span>//</span><span>designed by yavuzselimerdogan</span><span>//</span><span>CROSS-VALIDATION ENABLED</span>
+    </div>
+    <div class="wm-row">
+      <span>TOP SECRET</span><span>//</span><span>designed by yavuzselimerdogan</span><span>//</span><span>GENIUS ENGINE ONLINE</span>
+    </div>
+  </div>
+
+  <div class="hud-container">
+    <!-- ═══ HUD Header ═══ -->
+    <header class="hud-header" id="app-header">
+      <div class="logo">
+        <div class="logo-icon glitch" data-text="SYS">SYS</div>
+        <div class="logo-text-wrapper">
+          <div class="logo-text glitch" data-text="TRANSLATOR_PRO">TRANSLATOR_PRO</div>
+          <span class="logo-version">> TERMINAL_V3.0_ONLINE</span>
+        </div>
+      </div>
+      
+      <div class="header-status">
+        <div class="sys-time" id="sys-time">00:00:00:000</div>
+        <div class="sys-status">
+          <span class="blinking-dot"></span> SECURE_CONNECTION
+        </div>
+        <button class="cyber-btn-small" id="settings-btn">[ CFG ]</button>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <!-- ═══ Upload Section ═══ -->
+      <section class="cyber-panel panel-left" id="upload-section">
+        <div class="panel-corner top-left"></div>
+        <div class="panel-corner top-right"></div>
+        <div class="panel-corner bottom-left"></div>
+        <div class="panel-corner bottom-right"></div>
+        
+        <div class="panel-header">
+          <span class="panel-id">SEQ-01</span>
+          <span class="panel-title">DATA_INPUT_NODE</span>
+        </div>
+
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-scanner"></div>
+          <div class="upload-content">
+            <span class="upload-icon">[\/]</span>
+            <div class="upload-title">INITIALIZE DATA TRANSFER</div>
+            <div class="upload-subtitle">Drop PDF to extract payload or <span class="highlight">BROWSE</span></div>
+          </div>
+          <input type="file" class="file-input" id="file-input" accept=".pdf">
+        </div>
+
+        <div class="file-info" id="file-info">
+          <div class="file-icon">EXE</div>
+          <div class="file-details">
+            <div class="file-name" id="file-name">target_file.pdf</div>
+            <div class="file-meta" id="file-meta">Analyzing...</div>
+          </div>
+          <button class="file-remove" id="file-remove" title="Abort">✖</button>
+        </div>
+      </section>
+
+      <!-- ═══ Configuration Section ═══ -->
+      <section class="cyber-panel panel-right" id="settings-section">
+        <div class="panel-corner top-left"></div>
+        <div class="panel-corner top-right"></div>
+        <div class="panel-corner bottom-left"></div>
+        <div class="panel-corner bottom-right"></div>
+        
+        <div class="panel-header">
+          <span class="panel-id">SEQ-02</span>
+          <span class="panel-title">TRANSLATION_PARAMS</span>
+        </div>
+
+        <div class="settings-grid">
+          <div class="form-group">
+            <label for="source-lang">> SRC_LANG</label>
+            <div class="cyber-select-wrapper">
+              <select class="cyber-select" id="source-lang">
+                <option value="auto">AUTODETECT [AI]</option>
+                <option value="en" selected>ENGLISH</option>
+                <option value="de">GERMAN</option>
+                <option value="fr">FRENCH</option>
+                <option value="tr">TURKISH</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="target-lang">> TGT_LANG</label>
+            <div class="cyber-select-wrapper">
+              <select class="cyber-select" id="target-lang">
+                <option value="tr" selected>TURKISH</option>
+                <option value="en">ENGLISH</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-range-wrapper">
+          <div class="page-range-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="page-range-enabled">
+              <span class="slider"></span>
+            </label>
+            <label for="page-range-enabled">OVERRIDE_SECTORS</label>
+          </div>
+
+          <div class="page-range-row" id="page-range-row" style="display:none;">
+            <div class="form-group">
+              <input type="number" class="cyber-input" id="page-start" min="1" value="1" placeholder="START">
+            </div>
+            <span class="range-sep">...</span>
+            <div class="form-group">
+              <input type="number" class="cyber-input" id="page-end" min="1" placeholder="END">
+            </div>
+          </div>
+        </div>
+
+        <button class="cyber-btn primary-btn mt-20" id="translate-btn" disabled>
+          <span class="btn-text">>> EXECUTE_ROUTINE</span>
+          <span class="btn-glitch"></span>
+        </button>
+      </section>
+
+      <!-- ═══ Progress Section ═══ -->
+      <section class="cyber-panel progress-section" id="progress-section">
+        <div class="panel-corner top-left"></div>
+        <div class="panel-corner top-right"></div>
+        <div class="panel-corner bottom-left"></div>
+        <div class="panel-corner bottom-right"></div>
+        
+        <div class="panel-header">
+          <span class="panel-id">SEQ-03</span>
+          <span class="panel-title">SYSTEM_OPERATION</span>
+        </div>
+
+        <div class="progress-display">
+          <div class="progress-ring-container">
+            <svg class="progress-ring" width="120" height="120">
+              <circle class="progress-ring-bg" stroke-width="6" fill="transparent" r="54" cx="60" cy="60"/>
+              <circle class="progress-ring-circle" id="progress-circle" stroke-width="6" fill="transparent" r="54" cx="60" cy="60"/>
+            </svg>
+            <div class="progress-percentage-text" id="progress-pct">0%</div>
+          </div>
+          
+          <div class="progress-info">
+            <div class="progress-page glitch" id="progress-page" data-text="ANALYZING DATA">ANALYZING DATA</div>
+            
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-bar" style="width: 0%;"></div>
+            </div>
+
+            <div class="status-indicator">
+              <div class="status-dot active" id="status-dot"></div>
+              <span id="status-text" class="typewriter">Injecting logic...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-stats">
+          <div class="stat-cyber">
+            <div class="stat-val" id="stat-translated">0</div>
+            <div class="stat-lbl">BLOCKS_MUTATED</div>
+          </div>
+          <div class="stat-cyber">
+            <div class="stat-val" id="stat-cached">0</div>
+            <div class="stat-lbl">CACHE_HITS</div>
+          </div>
+          <div class="stat-cyber">
+            <div class="stat-val" id="stat-eta">--:--</div>
+            <div class="stat-lbl">TTL_REMAINING</div>
+          </div>
+          <div class="stat-cyber error-stat">
+            <div class="stat-val" id="stat-errors">0</div>
+            <div class="stat-lbl">ERRORS</div>
+          </div>
+        </div>
+
+        <button class="cyber-btn danger-btn" id="cancel-btn" style="display:none;">
+          <span class="btn-text">ABORT_OPERATION</span>
+        </button>
+      </section>
+
+      <!-- ═══ Completion Section ═══ -->
+      <section class="cyber-panel completion-section" id="completion-section">
+        <div class="panel-corner top-left"></div>
+        <div class="panel-corner top-right"></div>
+        <div class="panel-corner bottom-left"></div>
+        <div class="panel-corner bottom-right"></div>
+
+        <div class="completion-content">
+          <div class="completion-icon glitch" data-text="ACCESS_GRANTED">ACCESS_GRANTED</div>
+          <div class="completion-title">PAYLOAD DECRYPTED</div>
+          <div class="completion-subtitle" id="completion-subtitle">File successfully processed by neural network.</div>
+          <a href="#" class="cyber-btn success-btn" id="download-btn">
+            <span class="btn-text">[ EXTRACT_FILE ]</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ═══ Preview Section ═══ -->
+      <section class="cyber-panel preview-section" id="preview-section">
+        <div class="panel-corner top-left"></div>
+        <div class="panel-corner top-right"></div>
+        <div class="panel-corner bottom-left"></div>
+        <div class="panel-corner bottom-right"></div>
+        
+        <div class="panel-header">
+          <span class="panel-id">SEQ-04</span>
+          <span class="panel-title">VISUAL_ANALYSIS</span>
+        </div>
+
+        <div class="preview-tabs">
+          <button class="cyber-tab active" data-tab="original" id="tab-original">RAW_FEED</button>
+          <button class="cyber-tab" data-tab="translated" id="tab-translated">PROCESSED_FEED</button>
+        </div>
+
+        <div class="preview-canvas-wrapper" id="preview-wrapper">
+          <div class="scanner-line"></div>
+          <!-- Raw HTML5 Waveform Canvas -->
+          <canvas id="waveform-canvas" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;"></canvas>
+          <img id="preview-img" src="" alt="View" style="display:none; position: relative; z-index: 2;">
+          <div id="preview-placeholder" class="typewriter" style="position: absolute; z-index: 3; bottom: 20px;">
+            > AWAITING_NEURAL_LINK...
+          </div>
+        </div>
+
+        <div class="preview-nav">
+          <button class="cyber-btn-nav" id="prev-page-btn" disabled><</button>
+          <span class="page-info" id="preview-page-info">0x00</span>
+          <button class="cyber-btn-nav" id="next-page-btn" disabled>></button>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- ═══ Settings Modal ═══ -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="cyber-modal">
+      <div class="modal-corner top-left"></div>
+      <div class="modal-corner top-right"></div>
+      <div class="modal-corner bottom-left"></div>
+      <div class="modal-corner bottom-right"></div>
+
+      <div class="modal-header">
+        <div class="modal-title glitch" data-text="SYSTEM_OVERRIDE">SYSTEM_OVERRIDE</div>
+        <button class="modal-close" id="modal-close">X</button>
+      </div>
+
+      <div class="settings-group">
+        <label for="setting-workers">> ALLOCATED_THREADS</label>
+        <input type="number" class="cyber-input w-full" id="setting-workers" min="1" max="16" value="4">
+      </div>
+
+      <div class="settings-group">
+        <label for="setting-chunk-size">> CHUNK_BUFFER</label>
+        <input type="number" class="cyber-input w-full" id="setting-chunk-size" min="500" max="10000" value="4000" step="500">
+      </div>
+
+      <div class="settings-group">
+        <label for="setting-save-every">> MEMORY_SYNC</label>
+        <input type="number" class="cyber-input w-full" id="setting-save-every" min="5" max="200" value="50" step="5">
+      </div>
+
+      <div class="settings-group mt-20">
+        <button class="cyber-btn danger-btn w-full" id="clear-cache-btn">
+          <span class="btn-text">FLUSH_CACHE_MEMORY</span>
+        </button>
+      </div>
+
+      <button class="cyber-btn primary-btn w-full mt-20" id="save-settings-btn">
+        <span class="btn-text">COMMIT_CHANGES</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/static/app.js?v=50"></script>
+</body>
+</html>
