@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+uploads/
+translations/
+*.DS_Store
+*_translation_cache.json
+.translation_history.json
+*.pdf
+*.log
+.env
